@@ -129,9 +129,7 @@ if(!require('tidyext')) devtools::install_github('m-clark/tidyext', upgrade = "n
 
 
 ```{r dataset, echo=FALSE, warning=FALSE}
-# df <- read.csv(paste0(here::here(),'/mydata.csv'), encoding="UTF-8")
-
-df <- read.csv('C:/Users/Traffic/Desktop/SOHBATZADEH/esf98_tag_viloation (2).csv', encoding="UTF-8")
+df <- read.csv(paste0(here::here(),'/mydata.csv'), encoding="UTF-8")
 
 df <- df %>% mutate_if(is.character, as.factor) %>% 
   relocate(accident)
