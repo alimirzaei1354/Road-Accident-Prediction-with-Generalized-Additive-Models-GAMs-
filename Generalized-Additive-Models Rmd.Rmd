@@ -125,3 +125,29 @@ if(!require('tibble')) install.packages('tibble')
 if(!require('visibly')) devtools::install_github('m-clark/visibly', upgrade = "never")
 if(!require('tidyext')) devtools::install_github('m-clark/tidyext', upgrade = "never")
 ```
+## Dataset
+
+
+```{r dataset, echo=FALSE, warning=FALSE}
+# df <- read.csv(paste0(here::here(),'/mydata.csv'), encoding="UTF-8")
+
+df <- read.csv('C:/Users/Traffic/Desktop/SOHBATZADEH/esf98_tag_viloation (2).csv', encoding="UTF-8")
+
+df <- df %>% mutate_if(is.character, as.factor) %>% 
+  relocate(accident)
+## mydata have 4 class of days:high_holiday=="long vacation or special dayes",low_holiday=="short vacation",holiday=="only friday",normal=="No holidays"
+df$high_holiday <- ifelse(df$TAG ==  "تعطيلي بلند مدت", 1 , 0) #long vacation 
+df$low_holiday <- ifelse(df$TAG ==  "تعطيلي کوتاه مدت", 1 , 0) #short vacation
+df$holiday <- ifelse(df$TAG ==  "تعطيل", 1 , 0) #only friday
+df$normal <- ifelse(df$TAG ==  "عادي", 1 , 0) #No holidays 
+#Another feature of the days of the week is IS_HOLIDAY=="holidays or no holidays"
+cols <- c('IS_HOLIDAY'
+           , 'high_holiday', 'low_holiday', 'holiday', 'normal'
+          )
+df[cols] <- lapply(df[cols], factor)
+# df <- df %>% mutate(c.day = 1:nrow(df))
+```
+```{r data}
+##glimpse makes it possible to see every column in a data frame
+glimpse(df)
+```
