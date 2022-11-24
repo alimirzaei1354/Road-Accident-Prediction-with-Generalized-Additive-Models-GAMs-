@@ -125,7 +125,7 @@ if(!require('tibble')) install.packages('tibble')
 if(!require('visibly')) devtools::install_github('m-clark/visibly', upgrade = "never")
 if(!require('tidyext')) devtools::install_github('m-clark/tidyext', upgrade = "never")
 ```
-## Dataset
+# Dataset
 
 
 ```{r dataset, echo=FALSE, warning=FALSE}
@@ -133,7 +133,7 @@ df <- read.csv(paste0(here::here(),'/mydata.csv'), encoding="UTF-8")
 
 df <- df %>% mutate_if(is.character, as.factor) %>% 
   relocate(accident)
-## mydata have 4 class of days:high_holiday=="long vacation or special dayes",low_holiday=="short vacation",holiday=="only friday",normal=="No holidays"
+# mydata have 4 class of days:high_holiday=="long vacation or special dayes",low_holiday=="short vacation",holiday=="only friday",normal=="No holidays"
 df$high_holiday <- ifelse(df$TAG ==  "تعطيلي بلند مدت", 1 , 0) #long vacation 
 df$low_holiday <- ifelse(df$TAG ==  "تعطيلي کوتاه مدت", 1 , 0) #short vacation
 df$holiday <- ifelse(df$TAG ==  "تعطيل", 1 , 0) #only friday
@@ -145,11 +145,11 @@ cols <- c('IS_HOLIDAY'
 df[cols] <- lapply(df[cols], factor)
 # df <- df %>% mutate(c.day = 1:nrow(df))
 ```
+# glimpse makes it possible to see every column in a data frame
 ```{r data}
-##glimpse makes it possible to see every column in a data frame
 glimpse(df)
 ```
-## Exploratory Data Analysis
+### Exploratory Data Analysis
 ```{r pairs_plot}
 smooth <- function(data, mapping, ptcol, ptalpha=1, ptsize=1, linecol, ...) {
 p <- ggplot(data = data, mapping = mapping) +
@@ -159,11 +159,11 @@ p
 }
 ggpairs(df)
 ```
-###Interactions between  variables
+## Interactions between  variables
 Splitting up continuous variables is generally a bad idea. In terms of statistical efficiency, the popular practice of dichotomising continuous variables at their median is comparable to throwing out a third of the dataset. Moreover, statistical models based on split-up continuous variables are prone to misinterpretation: threshold effects are easily read into the results when, in fact, none exist. Splitting up, or ‘binning’, continuous variables, then, is something to avoid. But what if you’re interested in how the effect of one continuous predictor varies according to the value of another continuous predictor? In other words, what if you’re interested in the interaction between two continuous predictors? Binning one of the predictors seems appealing since it makes the model easier to interpret.
 source:https://janhove.github.io/analysis/2017/06/26/continuous-interactions
-### Exploratory plots
-```{r IExploratory plots}
+##  Exploratory plots
+```{r Exploratory plots}
 par(mfrow = c(1, 3))
 
 # Intercorrelation DISTANCE_VIOLATIONS/SPEED_VIOLATIONS
@@ -178,7 +178,15 @@ lines(lowess(df$SPEED_VIOLATIONS, df$accident), col = "red")
 # DISTANCE_VIOLATIONS vs. accident
 plot(accident ~ DISTANCE_VIOLATIONS, df)
 lines(lowess(df$DISTANCE_VIOLATIONS, df$accident), col = "red")
-
+```
+# conditioning plots
+When we suspect there’s an interaction between two predictors, it’s useful to draw conditioning plots as well. For these plots, the dataset is split up into a number of overlapping equal-sized regions defined by a conditioning variable, and the relationship between the predictor of interest and the outcome within each region is plotted.Our assumption is that road accidents have a high impact of SPEED_violations &DISTANCE_violations.
+```{r conditioning plots}
+library(lattice)
+coplot(accident ~ SPEED_VIOLATIONS | DISTANCE_VIOLATIONS, data = df, 
+       number = 4, rows = 1,
+       panel = panel.smooth)
+```
 
 
 
