@@ -149,3 +149,36 @@ df[cols] <- lapply(df[cols], factor)
 ##glimpse makes it possible to see every column in a data frame
 glimpse(df)
 ```
+## Exploratory Data Analysis
+```{r pairs_plot}
+smooth <- function(data, mapping, ptcol, ptalpha=1, ptsize=1, linecol, ...) {
+p <- ggplot(data = data, mapping = mapping) +
+geom_point(color=ptcol, alpha=ptalpha, size=ptsize) +
+geom_smooth(color=linecol, ...)
+p
+}
+ggpairs(df)
+```
+###Interactions between  variables
+Splitting up continuous variables is generally a bad idea. In terms of statistical efficiency, the popular practice of dichotomising continuous variables at their median is comparable to throwing out a third of the dataset. Moreover, statistical models based on split-up continuous variables are prone to misinterpretation: threshold effects are easily read into the results when, in fact, none exist. Splitting up, or ‘binning’, continuous variables, then, is something to avoid. But what if you’re interested in how the effect of one continuous predictor varies according to the value of another continuous predictor? In other words, what if you’re interested in the interaction between two continuous predictors? Binning one of the predictors seems appealing since it makes the model easier to interpret.
+source:https://janhove.github.io/analysis/2017/06/26/continuous-interactions
+### Exploratory plots
+```{r IExploratory plots}
+par(mfrow = c(1, 3))
+
+# Intercorrelation DISTANCE_VIOLATIONS/SPEED_VIOLATIONS
+# First, let’s draw some quick graphs to get a sense of how the predictors and the accident are related.
+plot(SPEED_VIOLATIONS ~ DISTANCE_VIOLATIONS, df)
+lines(lowess(df$DISTANCE_VIOLATIONS, df$SPEED_VIOLATIONS), col = "red")
+
+# SPEED_VIOLATIONS vs. accident
+plot(accident ~ SPEED_VIOLATIONS, df)
+lines(lowess(df$SPEED_VIOLATIONS, df$accident), col = "red")
+
+# DISTANCE_VIOLATIONS vs. accident
+plot(accident ~ DISTANCE_VIOLATIONS, df)
+lines(lowess(df$DISTANCE_VIOLATIONS, df$accident), col = "red")
+
+
+
+
