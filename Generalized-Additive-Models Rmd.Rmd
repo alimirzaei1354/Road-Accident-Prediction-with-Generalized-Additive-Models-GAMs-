@@ -127,7 +127,7 @@ if(!require('tidyext')) devtools::install_github('m-clark/tidyext', upgrade = "n
 ```
 # Dataset
 The data set has been constructed using  
-traffic parameters of cars and police crimes on the road level. The key variables are as follows:
+traffic parameters of cars and police enforcments on the road level(Independent variables) and Fatal and injured accidents as dependent variable(Y) .The Independent variables are as follows:
 - Speed violation
 - Distance violation
 Volum of all kinds of classes of vehicles included:
@@ -199,6 +199,15 @@ library(lattice)
 coplot(accident ~ SPEED_VIOLATIONS | DISTANCE_VIOLATIONS, data = df, 
        number = 4, rows = 1,
        panel = panel.smooth)
+```
+# Mode0 (Linear Fit)
+
+We will start with the simple situation of a single predictor. Let's begin by using a typical linear regression to predict science scores by the Income index.  We could use the standard R `lm` function, but I'll leave that as an exercise for comparison.  We can still do straightforward linear models with the `gam` function, and again it is important to note that the standard linear model can be seen as a special case of a GAM.
+
+```{r mod_lm, echo=-4}
+library(mgcv)
+mod_lm <- gam(accident ~  SPEED_VIOLATIONS, data=pisa)
+summary(mod_lm)
 ```
 # Model 1
 
