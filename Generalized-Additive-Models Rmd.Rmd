@@ -126,9 +126,21 @@ if(!require('visibly')) devtools::install_github('m-clark/visibly', upgrade = "n
 if(!require('tidyext')) devtools::install_github('m-clark/tidyext', upgrade = "never")
 ```
 # Dataset
+The data set has been constructed using  
+traffic parameters of cars and police crimes on the road level. The key variables are as follows:
+- Speed violation
+- Distance violation
+Volum of all kinds of classes of vehicles included:
+- Class one: light cars
+- Class 2: Semi-heavy vehicles
+- Class 3: heavy vehicles
+- Class 4: Bus
+- Class five: trailer cars
+- The Volum of police enforment on the road
 
 
 ```{r dataset, echo=FALSE, warning=FALSE}
+The first thing to do is get the data in and do some initial inspections.
 df <- read.csv(paste0(here::here(),'/mydata.csv'), encoding="UTF-8")
 
 df <- df %>% mutate_if(is.character, as.factor) %>% 
@@ -150,6 +162,7 @@ df[cols] <- lapply(df[cols], factor)
 glimpse(df)
 ```
 ### Exploratory Data Analysis
+We can look at the individual relationships of covariates with overall science score.
 ```{r pairs_plot}
 smooth <- function(data, mapping, ptcol, ptalpha=1, ptsize=1, linecol, ...) {
 p <- ggplot(data = data, mapping = mapping) +
@@ -187,6 +200,33 @@ coplot(accident ~ SPEED_VIOLATIONS | DISTANCE_VIOLATIONS, data = df,
        number = 4, rows = 1,
        panel = panel.smooth)
 ```
+# Model 1
+
+```{r smooth_parameter, fig.width=10, warning=FALSE}
+fits = purrr::map_df(
+  c(0.00001, 0.01, 1, 100, 1000000),
+  function(p)
+    tibble(polynomial = p,
+           JDATE = df$JDATE,
+           fits = fitted(
+             gam(acc_total ~ s(SPEED_VIOLATIONS, k = 30) +
+                   s(DISTANCE_VIOLATIONS) 
+                 ,data = df, family = 'poisson', sp = p)
+           ))
+) %>%
+  mutate(polynomial = factor(polynomial, labels = c(0.00001, 0.01, 1, 100, 10000),))
+
+
+
+plot_ly(data = df) %>%
+  add_markers( x = ~JDATE,
+               y = ~acc_total,
+               marker = list(color = '#D55E00', opacity = .2),
+               showlegend = F) %>%
+  add_lines( x = ~JDATE, y = ~ fits, color =  ~ polynomial, data = fits)%>%
+  theme_plotly() %>% config(displayModeBar = T)
+```
+
 
 
 
