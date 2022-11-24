@@ -135,7 +135,7 @@ Volum of all kinds of classes of vehicles included:
 - Class 2: Semi-heavy vehicles
 - Class 3: heavy vehicles
 - Class 4: Bus
-- Class five: trailer cars
+- Class five: super_heavy vehicles
 - The Volum of police enforment on the road
 
 
