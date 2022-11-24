@@ -209,6 +209,8 @@ library(mgcv)
 mod_lm <- gam(accident ~  SPEED_VIOLATIONS, data=pisa)
 summary(mod_lm)
 ```
+### GAM
+### Fitting the model
 # Model 1
 
 ```{r smooth_parameter, fig.width=10, warning=FALSE}
