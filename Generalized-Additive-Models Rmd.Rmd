@@ -206,9 +206,20 @@ We will start with the simple situation of a single predictor. Let's begin by us
 
 ```{r mod_lm, echo=-4}
 library(mgcv)
-mod_lm <- gam(accident ~  SPEED_VIOLATIONS, data=pisa)
+mod_lm <- gam(accident ~  SPEED_VIOLATIONS, data=df)
 summary(mod_lm)
 ```
+# factor variables
+Notice how R reports an intercept parameter and parameters for the two treatment
+levels, but, in order to obtain an identifiable model, it has not included a parameter
+for the control level of the group factor.
+TAG is a factor variable in my data.
+df$TAG <- as.factor(df$TAG)
+fit <- lm(accident ~ TAG , data=df)
+summary(fit)
+par(mfrow=c(3,3))
+plot(fit)
+###
 ### GAM
 ### Fitting the model
 # Model 1
