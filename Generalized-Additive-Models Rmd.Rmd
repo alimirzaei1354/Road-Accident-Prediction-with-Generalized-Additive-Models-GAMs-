@@ -206,7 +206,7 @@ We will start with the simple situation of a single predictor. Let's begin by us
 
 ```{r mod_lm, echo=-4}
 library(mgcv)
-mod_lm <- gam(accident ~  SPEED_VIOLATIONS, data=df)
+mod_lm <- lm(accident ~  SPEED_VIOLATIONS, data=df)
 summary(mod_lm)
 ```
 # factor variables
@@ -219,6 +219,20 @@ fit <- lm(accident ~ TAG , data=df)
 summary(fit)
 par(mfrow=c(3,3))
 plot(fit)
+#Measures of Influence
+olsrr offers the following tools to detect influential observations:
+-Cook’s D Bar Plot
+-Cook’s D Chart
+-DFBETAs Panel
+-DFFITs Plot
+-Studentized Residual Plot
+-Standardized Residual Chart
+-Studentized Residuals vs Leverage Plot
+-Deleted Studentized Residual vs Fitted Values Plot
+-Hadi Plot
+-Potential Residual Plot
+
+ols_plot_cooksd_bar(mod_lm)  # A data point having a large cook’s d indicates that the data point strongly influences the fitted values.
 ###
 ### GAM
 ### Fitting the model
