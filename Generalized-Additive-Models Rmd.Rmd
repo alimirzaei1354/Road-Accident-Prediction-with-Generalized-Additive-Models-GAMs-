@@ -219,6 +219,7 @@ fit <- lm(accident ~ TAG , data=df)
 summary(fit)
 par(mfrow=c(3,3))
 plot(fit) # Then R will show you four diagnostic plots one by one:1. Residuals vs Fitted,2. Normal Q-Q,3. Scale-Location,4. Residuals vs Leverage
+#https://data.library.virginia.edu/diagnostic-plots/
 ## Measures of Influence
 olsrr offers the following tools to detect influential observations:
 -Cook’s D Bar Plot
