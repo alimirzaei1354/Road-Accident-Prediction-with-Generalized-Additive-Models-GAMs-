@@ -233,7 +233,12 @@ olsrr offers the following tools to detect influential observations:
 -Potential Residual Plot
 
 ols_plot_cooksd_bar(mod_lm)  # A data point having a large cook’s d indicates that the data point strongly influences the fitted values.
-###
+ols_plot_dfbetas(mod_lm)
+ols_plot_resid_stud(mod_lm)
+ols_plot_resid_lev(mod_lm)
+ols_plot_resid_stud_fit(mod_lm)
+ols_plot_resid_pot(mod_lm)
+
 ### GAM
 ### Fitting the model
 # Model 1
