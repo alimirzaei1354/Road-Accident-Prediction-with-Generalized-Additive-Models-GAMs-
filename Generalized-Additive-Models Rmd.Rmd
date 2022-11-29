@@ -239,6 +239,8 @@ ols_plot_resid_stud(mod_lm)
 ols_plot_resid_lev(mod_lm)
 ols_plot_resid_stud_fit(mod_lm)
 ols_plot_resid_pot(mod_lm)
+## How to calculate the 95% confidence interval for the slope
+confint(mod_lm, 'SPEED_VIOLATIONS', level=0.95)
 
 #   GAM
 ### Fitting the model
