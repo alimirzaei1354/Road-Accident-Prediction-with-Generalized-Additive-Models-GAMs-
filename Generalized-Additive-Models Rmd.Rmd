@@ -4,7 +4,7 @@ author: "Ali Mirzaei"
 date: "11/4/2022"
 output: html_document
 
-## Fitting a GAM in R
+# Fitting a GAM in R
 ```r
 model <- gam(y ~ s(x1) + s(x2) + te(x3, x4), # formuala describing model
              data = my_data_frame,           # your data
@@ -108,7 +108,7 @@ Simon Wood & colleagues (2016) have extended the *mgcv* methods to some non-expo
 * `gamals()`
 * `ocat()`
 
-## Libraries
+#  Libraries
 
 ```{r libraries, message=FALSE, warning=FALSE}
 if(!require('dplyr')) install.packages('dplyr')
@@ -161,7 +161,7 @@ df[cols] <- lapply(df[cols], factor)
 ```{r data}
 glimpse(df)
 ```
-### Exploratory Data Analysis
+#  Exploratory Data Analysis
 We can look at the individual relationships of covariates with overall science score.
 ```{r pairs_plot}
 smooth <- function(data, mapping, ptcol, ptalpha=1, ptsize=1, linecol, ...) {
@@ -192,7 +192,7 @@ lines(lowess(df$SPEED_VIOLATIONS, df$accident), col = "red")
 plot(accident ~ DISTANCE_VIOLATIONS, df)
 lines(lowess(df$DISTANCE_VIOLATIONS, df$accident), col = "red")
 ```
-# conditioning plots
+## conditioning plots
 When we suspect there’s an interaction between two predictors, it’s useful to draw conditioning plots as well. For these plots, the dataset is split up into a number of overlapping equal-sized regions defined by a conditioning variable, and the relationship between the predictor of interest and the outcome within each region is plotted.Our assumption is that road accidents have a high impact of SPEED_violations &DISTANCE_violations.
 ```{r conditioning plots}
 library(lattice)
@@ -200,7 +200,7 @@ coplot(accident ~ SPEED_VIOLATIONS | DISTANCE_VIOLATIONS, data = df,
        number = 4, rows = 1,
        panel = panel.smooth)
 ```
-# Mode0 (Linear Fit)
+#  Mode0 (Linear Fit)
 
 We will start with the simple situation of a single predictor. Let's begin by using a typical linear regression to predict science scores by the Income index.  We could use the standard R `lm` function, but I'll leave that as an exercise for comparison.  We can still do straightforward linear models with the `gam` function, and again it is important to note that the standard linear model can be seen as a special case of a GAM.
 
@@ -209,7 +209,7 @@ library(mgcv)
 mod_lm <- lm(accident ~  SPEED_VIOLATIONS, data=df)
 summary(mod_lm)
 ```
-# factor variables
+## factor variables
 Notice how R reports an intercept parameter and parameters for the two treatment
 levels, but, in order to obtain an identifiable model, it has not included a parameter
 for the control level of the group factor.
@@ -219,7 +219,7 @@ fit <- lm(accident ~ TAG , data=df)
 summary(fit)
 par(mfrow=c(3,3))
 plot(fit)
-#Measures of Influence
+## Measures of Influence
 olsrr offers the following tools to detect influential observations:
 -Cook’s D Bar Plot
 -Cook’s D Chart
@@ -239,7 +239,7 @@ ols_plot_resid_lev(mod_lm)
 ols_plot_resid_stud_fit(mod_lm)
 ols_plot_resid_pot(mod_lm)
 
-### GAM
+#  GAM
 ### Fitting the model
 # Model 1
 
