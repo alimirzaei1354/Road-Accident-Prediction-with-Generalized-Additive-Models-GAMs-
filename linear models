@@ -43,7 +43,24 @@ mode10 <- lm(acc_total ~
 # 
 summary(mode10 )
 #
-
+#model plot
+```{r model plot}
+par(mfrow=c(2,2)) # split the graphics device into 4 panels
+plot(modl0) # (uses plot.lm as modl0 is class ‘lm’)
+# diagnostic plots one by one.
+-1. Residuals vs Fitted
+This plot shows if residuals have non-linear patterns.
+2. Normal Q-Q
+This plot shows if residuals are normally distributed. 
+3. Scale-Location
+It’s also called Spread-Location plot. This is how you can check the assumption of equal variance (homoscedasticity).
+4. Residuals vs Leverage
+This plot helps us to find influential cases (i.e., subjects) if any.
+```
+#AIC 
+```{R AIC }
+AIC(modl0) # Selecting models in order to minimize Akaike’s Information Criterion (AIC) is one way of trying to do this.
+```
 
 
 
