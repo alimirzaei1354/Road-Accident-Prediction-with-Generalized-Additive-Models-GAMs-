@@ -98,11 +98,10 @@ rf_model = train(
 predictions = predict(rf_model, newdata = test)
 print(predictions)
 ```
-
-
-
-
-
+# See the confusion matrix of your model in the test set
+```{r confusion}
+confusionMatrix(predictions, test$acc_total)
+```
 ## factor variables
 Notice how R reports an intercept parameter and parameters for the two treatment
 levels, but, in order to obtain an identifiable model, it has not included a parameter
