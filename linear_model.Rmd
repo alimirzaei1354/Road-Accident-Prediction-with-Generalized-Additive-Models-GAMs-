@@ -1,0 +1,132 @@
+---
+title: "lm_accident_prediction"
+author: "Ali_Mirzaei"
+date: "2022-11-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r library}
+library('caret')
+```
+#data explantory
+```{r data}
+glimpse(df)
+```
+
+
+#plot Accidents for 365 dayes
+```{r plot accidents}
+plot(df$acc_total, main = "Time series",type = "l")
+```
+#lm model0 
+```{r lm}
+modl0 <- lm(acc_total ~ 
+              TOTAL_VEHICLES, data=df)
+summary(modl0 )
+```
+#residuals
+```{r residuals}
+plot(fitted(modl0),residuals(modl0), xlab="fitted values",ylab="residuals")
+```
+#confidence interval for coefficients
+```{r confidence interval}
+confint(modl0, 'TOTAL_VEHICLES', level=0.95)
+```
+#pairs plot 
+```{r pairs plot}
+corrplot(
+  cor(df %>% select(-JDATE,-JYEAR, -TAG,
+                    -JMONTH, -JDAY, -JDATE,
+                    -IS_HOLIDAY, -DESCRIPTION,
+                   )),
+  method = 'square',
+  type = 'upper',
+  tl.col = 'black',
+  tl.cex = 0.75, tl.srt = 90,
+  col = colorRampPalette(c('purple', 'dark green'))(200)
+)
+```
+#model matrix
+```{r model matrix}
+model.matrix(modl0)
+```
+#model plot
+```{r model plot}
+par(mfrow=c(2,2)) # split the graphics device into 4 panels
+plot(modl0) # (uses plot.lm as modl0 is class ‘lm’)
+```
+#AIC 
+```{R AIC }
+AIC(modl0)
+```
+#model selection 
+##lm modl1
+```{r lm1}
+modl1 <- lm(acc_total ~ 
+              SPEED_VIOLATIONS, data=df)
+summary(modl1 )
+```
+##AIC FOR TWO MODEL
+```{r model selection}
+AIC(modl1,modl0)
+```
+# Specifying an 80-20 train-test split
+```{r test data}
+train_idx = createDataPartition(df$SPEED_VIOLATIONS, p = .8, list = F)
+train = df[train_idx, ]
+test = df[-train_idx, ]
+print(test)
+```
+# Declaring the trainControl function
+```{r trainControl function}
+train_ctrl = trainControl(
+  method  = "cv", #Specifying Cross validation
+  number  = 2, # Specifying 5-fold
+  verboseIter = TRUE, # So that each iteration you get an update of the progress
+  classProbs = TRUE # So that you can obtain the probabilities for each example
+)
+rf_model = train(
+  acc_total ~SPEED_VIOLATIONS, # Specifying the response variable and the feature variables
+  method = "rf", # Specifying the model to use
+  data = train, 
+  trControl = train_ctrl
+)
+```
+
+## Get the predictions of your model in the test set 
+```{r pred}
+predictions = predict(rf_model, newdata = test)
+print(predictions)
+```
+## factor variables
+Notice how R reports an intercept parameter and parameters for the two treatment
+levels, but, in order to obtain an identifiable model, it has not included a parameter
+for the control level of the group factor.
+TAG is a factor variable in my data.
+```{r factor}
+df$TAG <- as.factor(df$TAG)
+fit <- lm(acc_total ~ TAG , data=df)
+summary(fit)
+par(mfrow=c(3,3))
+plot(fit) # Then R will show you four diagnostic plots one by one:1. Residuals vs Fitted,2. Normal Q-Q,3. Scale-Location,4. Residuals vs Leverage
+```
+## Measures of Influence
+```{r Influence}
+library(olsrr)
+par(mfrow=c(1,6))
+ols_plot_cooksd_bar(modl1)
+ols_plot_dfbetas(modl1)
+ols_plot_resid_stud(modl1)
+ols_plot_resid_lev(modl1)
+ols_plot_resid_stud_fit(modl1)
+ols_plot_resid_pot(modl1)
+```
+#confint
+```{r confidence interval}
+confint(modl1, 'SPEED_VIOLATIONS', level=0.95)
+```
+
+
