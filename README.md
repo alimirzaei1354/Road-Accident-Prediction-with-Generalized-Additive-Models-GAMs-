@@ -1,2 +1,1 @@
-# Road-Accident-Prediction-with-Generalized-Additive-Models-GAMs-research
-This project is designed to model road accidents based on traffic variables. title: "Generalized Additive Models (GAMs)" author: "AliMirzaei" date: "11/20/2022"
+Generalized additive models for Prediction non-linear trends in Road-Accidents data using R:Different than what has been done so far.
