@@ -61,6 +61,45 @@ This plot helps us to find influential cases (i.e., subjects) if any.
 ```{R AIC }
 AIC(modl0) # Selecting models in order to minimize Akaike’s Information Criterion (AIC) is one way of trying to do this.
 ```
+#model selection 
+##lm modl1
+```{r lm1}
+modl1 <- lm(acc_total ~ 
+              SPEED_VIOLATIONS, data=df)
+summary(modl1 )
+##AIC FOR TWO MODEL
+```{r model selection}
+AIC(modl1,modl0)
+```
+# Specifying an 80-20 train-test split
+```{r test data}
+train_idx = createDataPartition(df$SPEED_VIOLATIONS, p = .8, list = F)
+train = df[train_idx, ]
+test = df[-train_idx, ]
+print(test)
+```
+# Declaring the trainControl function
+```{r trainControl function}
+train_ctrl = trainControl(
+  method  = "cv", #Specifying Cross validation
+  number  = 2, # Specifying 5-fold
+  verboseIter = TRUE, # So that each iteration you get an update of the progress
+  classProbs = TRUE # So that you can obtain the probabilities for each example
+)
+rf_model = train(
+  acc_total ~SPEED_VIOLATIONS, # Specifying the response variable and the feature variables
+  method = "rf", # Specifying the model to use
+  data = train, 
+  trControl = train_ctrl
+)
+```
+#prediction 
+```{r pred}
+predictions = predict(rf_model, newdata = test)
+print(predictions)
+```
+
+
 
 
 
