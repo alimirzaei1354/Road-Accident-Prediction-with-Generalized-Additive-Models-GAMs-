@@ -1,0 +1,35 @@
+title: "Generalized linear Models (GAMs)"
+author: "Ali Mirzaei"
+date: "11/4/2022"
+## factor variables
+Notice how R reports an intercept parameter and parameters for the two treatment
+levels, but, in order to obtain an identifiable model, it has not included a parameter
+for the control level of the group factor.
+TAG is a factor variable in my data.
+df$TAG <- as.factor(df$TAG)
+fit <- lm(accident ~ TAG , data=df)
+summary(fit)
+par(mfrow=c(3,3))
+plot(fit) # Then R will show you four diagnostic plots one by one:1. Residuals vs Fitted,2. Normal Q-Q,3. Scale-Location,4. Residuals vs Leverage
+#https://data.library.virginia.edu/diagnostic-plots/
+## Measures of Influence
+olsrr offers the following tools to detect influential observations:
+-Cook’s D Bar Plot
+-Cook’s D Chart
+-DFBETAs Panel
+-DFFITs Plot
+-Studentized Residual Plot
+-Standardized Residual Chart
+-Studentized Residuals vs Leverage Plot
+-Deleted Studentized Residual vs Fitted Values Plot
+-Hadi Plot
+-Potential Residual Plot
+
+ols_plot_cooksd_bar(mod_lm)  # A data point having a large cook’s d indicates that the data point strongly influences the fitted values.
+ols_plot_dfbetas(mod_lm)
+ols_plot_resid_stud(mod_lm)
+ols_plot_resid_lev(mod_lm)
+ols_plot_resid_stud_fit(mod_lm)
+ols_plot_resid_pot(mod_lm)
+## How to calculate the 95% confidence interval for the slope
+confint(mod_lm, 'SPEED_VIOLATIONS', level=0.95)
