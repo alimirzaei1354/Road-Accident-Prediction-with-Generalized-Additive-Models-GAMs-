@@ -23,7 +23,26 @@ View(df)
 
 #Plot Accidents time series
 plot(df$acc_total, main = "Time series",type = "l")
-
+#pairs plot 
+```{r pairs plot}
+corrplot(
+  cor(df %>% select(-JDATE,-JYEAR, -TAG,
+                    -JMONTH, -JDAY, -JDATE,
+                    -IS_HOLIDAY, -DESCRIPTION,
+                   )),
+  method = 'square',
+  type = 'upper',
+  tl.col = 'black',
+  tl.cex = 0.75, tl.srt = 90,
+  col = colorRampPalette(c('purple', 'dark green'))(200)
+)
+```
+#model0
+mode10 <- lm(acc_total ~ 
+              TOTAL_VEHICLES, data=df) 
+# 
+summary(mode10 )
+#
 
 
 
