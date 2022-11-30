@@ -1,6 +1,33 @@
 title: "Generalized linear Models (GAMs)"
 author: "Ali Mirzaei"
 date: "11/4/2022"
+#Data set
+MF_read_CsV<-function(path,use_UTF8=TRUE,choose_file=FALSE,set_max_overlaps=TRUE){
+  if(set_max_overlaps){
+    options(ggrepel.max.overlaps = Inf)
+  }
+  if(choose_file){
+    path=file.choose()
+  }
+  if(use_UTF8){
+    data<- read.csv(path,encoding="UTF-8")
+  }else{
+    data<- read.csv(path)
+  }
+  
+  return(data)
+}
+
+df<- MF_read_CsV(path="C:/Users/Traffic/Desktop/SOHBATZADEH/esfahan-data-98-final.csv")
+View(df)
+
+#Plot Accidents time series
+plot(df$acc_total, main = "Time series",type = "l")
+
+
+
+
+
 ## factor variables
 Notice how R reports an intercept parameter and parameters for the two treatment
 levels, but, in order to obtain an identifiable model, it has not included a parameter
