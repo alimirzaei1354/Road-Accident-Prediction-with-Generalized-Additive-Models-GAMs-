@@ -128,7 +128,8 @@ ols_plot_resid_pot(modl1)
 ```{r confidence interval}
 confint(modl1, 'SPEED_VIOLATIONS', level=0.95)
 ```
-#random effect
+# LINEAR MIX MODEL (random effect)
+A fundamental question is, what effect does vacation have on accidents? Does it have a fixed effector random ?
 ```{r random effect}
 m0 <- lm(acc_total ~ IS_HOLIDAY , df)
 m1 <- lm(acc_total ~ IS_HOLIDAY + TAG, df)
