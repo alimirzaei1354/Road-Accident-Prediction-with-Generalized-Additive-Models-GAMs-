@@ -128,5 +128,19 @@ ols_plot_resid_pot(modl1)
 ```{r confidence interval}
 confint(modl1, 'SPEED_VIOLATIONS', level=0.95)
 ```
+#random effect
+```{r random effect}
+m0 <- lm(acc_total ~ IS_HOLIDAY , df)
+m1 <- lm(acc_total ~ IS_HOLIDAY + TAG, df)
+m2 <- lm(acc_total ~  TAG, df)
+anova(m0,m1,m2)
+## there is strong evidence for TAG to TAG differences, which means that with
+this model we can not tell whether IS_HOLIDAY had an effect or not.
+## The IS_HOLIDAY effects are fixed characteristics of the
+whole population of TAG that we are trying to learn about. In contrast, the TAG effect
+will vary randomly from TAG to TAG in the population.
+```
+
+
 
 
