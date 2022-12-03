@@ -141,7 +141,15 @@ this model we can not tell whether IS_HOLIDAY had an effect or not.
 whole population of TAG that we are trying to learn about. In contrast, the TAG effect
 will vary randomly from TAG to TAG in the population.
 ```
-
+# test effect
+```{r test effect}
+df1 <- df %>% select(TAG, acc_total, IS_HOLIDAY)
+st <- aggregate(data.matrix(df1),
+                by=list(TAG=df1$TAG),mean)
+m3 <- lm(acc_total ~ IS_HOLIDAY, st)
+anova(m3) # There is strong evidence for a IS_HOLIDAY effect here,
+summary(m3)$sigma^2 - summary(m1)$sigma^2/4
+```
 
 
 
