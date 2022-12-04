@@ -150,6 +150,11 @@ m3 <- lm(acc_total ~ IS_HOLIDAY, st)
 anova(m3) # There is strong evidence for a IS_HOLIDAY effect here,
 summary(m3)$sigma^2 - summary(m1)$sigma^2/4
 ```
-
+#intraction plot 
+```{r }
+df1 <- df %>% select(TAG,avg_class4_speed, acc_total)
+attach(df1)
+interaction.plot(avg_class4_speed,TAG, acc_total)
+``
 
 
