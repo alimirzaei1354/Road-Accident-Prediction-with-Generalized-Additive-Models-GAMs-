@@ -155,6 +155,20 @@ summary(m3)$sigma^2 - summary(m1)$sigma^2/4
 df1 <- df %>% select(TAG,avg_class4_speed, acc_total)
 attach(df1)
 interaction.plot(avg_class4_speed,TAG, acc_total)
+## JWEEKDAYNAME intraction 
+df1 <- df %>% select(JWEEKDAYNAME,
+                     class5, acc_total)
+attach(df1)
+interaction.plot(x.factor =df1$class5, #x-axis variable
+                 trace.factor = df1$JWEEKDAYNAME, #variable for lines
+                 response = df1$acc_total, #y-axis variable
+                 fun = median, #metric to plot
+                 ylab = "acc",
+                 xlab = "class5",
+                 col = c("yellow", "blue","red","green","Purple","black"),
+                 lty = 1, #line type
+                 lwd = 2, #line width
+                 trace.label = "Gender")
 ``
 
 
