@@ -178,5 +178,12 @@ m3 <- lm(acc_total ~ IS_HOLIDAY+TAG,df1)
 m4 <- lm(acc_total ~  IS_HOLIDAY+JWEEKDAYNAME,df1)
 m5 <- lm(acc_total ~  TAG+JWEEKDAYNAME,df1)
 anova(m0,m1,m2,m3,m4,m5)
+### sig analysis 
+m6 <- lm(acc_total ~ 1,st1)
+sig <- summary(m0)$sigma
+sigb <- (summary(m6)$sigma^2 - sig^2/3)^0.5
+sig
+sigb
+# So, there is a fairly large amount of rail to rail variability, whereas the measurement
+# error is relatively small.
 ```
-
