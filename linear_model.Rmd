@@ -169,6 +169,14 @@ interaction.plot(x.factor =df1$class5, #x-axis variable
                  lty = 1, #line type
                  lwd = 2, #line width
                  trace.label = "Gender")
-``
-
+                
+### anaysis of all factors for best selection
+m0 <- lm(acc_total ~  TAG,df1)
+m1 <- lm(acc_total ~ IS_HOLIDAY,df1)
+m2 <- lm(acc_total ~  JWEEKDAYNAME,df1)
+m3 <- lm(acc_total ~ IS_HOLIDAY+TAG,df1)
+m4 <- lm(acc_total ~  IS_HOLIDAY+JWEEKDAYNAME,df1)
+m5 <- lm(acc_total ~  TAG+JWEEKDAYNAME,df1)
+anova(m0,m1,m2,m3,m4,m5)
+```
 
