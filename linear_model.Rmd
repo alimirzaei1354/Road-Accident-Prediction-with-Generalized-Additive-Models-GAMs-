@@ -193,3 +193,10 @@ modg <- lme4::lmer(acc_total ~ SPEED_VIOLATIONS + (1 +SPEED_VIOLATIONS|IS_HOLIDA
 df$acc_total2 <- predict(modg)
 ggplot(df,aes(x=SPEED_VIOLATIONS,y=acc_total2,colour=IS_HOLIDAY, group=IS_HOLIDAY)) + geom_point() + geom_line() + theme(legend.position="bottom", legend.direction = "horizontal") 
 ```
+#Using ‘buildmer’ to automatically find & compare maximal (mixed) models
+```{r buildmer}
+m0 <- buildmer(acc_scal~SPEED_scal*dist_scal*HEAVY_scal+(SPEED_scal|IS_HOLIDAY)+(polic_scal|IS_HOLIDAY),data = df,buildmerControl=buildmerControl(direction='order',
+                                                                                                                                                 args=list(control=lmerControl(optimizer='bobyqa'))))
+(f <- formula(m0@model))
+summary(m)
+```
