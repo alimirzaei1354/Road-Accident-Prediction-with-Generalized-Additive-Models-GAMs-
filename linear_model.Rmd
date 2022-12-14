@@ -3,6 +3,7 @@ title: "lm_accident_prediction"
 author: "Ali_Mirzaei"
 date: "2022-11-30"
 output: html_document
+SOURCE:https://mspeekenbrink.github.io/sdam-r-companion/
 ---
 
 ```{r setup, include=FALSE}
