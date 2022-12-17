@@ -1,0 +1,38 @@
+library(ggplot2)
+library(plotly)
+library(dplyr)
+#fit linear model 
+linear_model <- lme4::lmer(acc_total ~ 1 + (1 + SPEED_VIOLATIONS | JMONTH), data=df)
+
+prd<-predict(linear_model)
+summary(linear_model)
+MuMIn::r.squaredGLMM(prd)
+sum((df1$acc_total-prd)^2)
+#gam model 
+final_gam <- gam(acc_total  ~
+                   s(SPEED_VIOLATIONS, k = 12, bs = 'tp') +
+                   s(DISTANCE_VIOLATIONS, k = 12, bs = 'tp') +
+                   s(JMONTH, bs = 'fs', k = 12) +
+                   ti(class4, IS_HOLIDAY, bs = 'fs') +
+                   ti(police_enforcment, IS_HOLIDAY, bs = 'fs') +
+                   ti(police_enforcment, JMONTH, bs = 'fs'),
+                 data = df, select = T, family = 'poisson',
+                 gamma = 0.01
+)
+pred <- as_tibble(predict(final_gam, newdata = df, se.fit = F,
+                          type = 'response'))
+pred <- bind_cols(df, pred)
+sum((pred$acc_total-pred$value)^2)                         
+#plot gam over linear model on jdat
+df %>% plot_ly(x = ~JDATE,
+               y = ~acc_total, type = 'scatter', mode = 'lines',
+               name = 'Data'
+) %>% 
+  add_lines(x = ~JDATE,
+            y = ~prd, name='LM', 
+            line=list(color="red", width=2)) %>% 
+  add_lines(data=pred
+              ,x = ~JDATE,
+            y = ~value, name='GAM', 
+            line=list(color="green", width=2))
+            
