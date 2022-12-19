@@ -1,0 +1,44 @@
+library(neuralnet)
+library(MASS)
+# Normalize the data
+data_acc <- data_acc %>% select(-JDATE,-JYEAR, -TAG,
+              -JMONTH, -JDAY, -JDATE,-JWEEKDAYNAME,
+              -IS_HOLIDAY, -DESCRIPTION)
+maxs <- apply(data_acc, 2, max) 
+mins <- apply(data_acc, 2, min)
+scaled <- as.data.frame(scale(data_acc, center = mins, 
+                              scale = maxs - mins))
+str(scaled)
+# Split the data into training and testing set
+index <- sample(1:nrow(data_acc), round(0.75 * nrow(data_acc)))
+train_ <- scaled[index,]
+test_ <- scaled[-index,]
+test_ <- test_ %>% select(acc_total,SPEED_VIOLATIONS,DISTANCE_VIOLATIONS,
+                          class4, class1,class2,class3,class5
+                                )
+train_ <- train_ %>% select(acc_total,SPEED_VIOLATIONS,DISTANCE_VIOLATIONS,
+                          class4, class1,class2,class3,class5)
+maxs <- apply(data_acc, 2, max) 
+mins <- apply(data_acc, 2, min)
+# Build Neural Network
+nn <- neuralnet(acc_total ~ SPEED_VIOLATIONS  +
+                  DISTANCE_VIOLATIONS +
+                  class4 +class1+class2+class3+class5
+                ,data = train_, hidden = c(4, 2), 
+                linear.output = TRUE)
+# Predict on test data
+pr.nn <- neuralnet::compute(nn, test_[,1:8])
+# Compute mean squared error
+pr.nn_ <- pr.nn$net.result * (max(data_acc$acc_total) - min(data_acc$acc_total)) 
++ min(data_acc$acc_total)
+test.r <- (test_$acc_total) * (max(data_acc$acc_total) - min(data_acc$acc_total)) + 
+  min(data_acc$acc_total)
+MSE.nn <- sum((test.r - pr.nn_)^2) / nrow(test_)
+
+# Plot the neural network
+plot(nn)
+# Plot regression line
+plot(test_$acc_total, pr.nn_, col = "red", 
+     main = 'Real vs Predicted')
+abline(0, 1, lwd = 2)
+
