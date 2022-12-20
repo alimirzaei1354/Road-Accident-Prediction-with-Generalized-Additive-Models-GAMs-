@@ -32,6 +32,11 @@ summary(modl0 )
 ```{r residuals}
 plot(fitted(modl0),residuals(modl0), xlab="fitted values",ylab="residuals")
 ```
+```{r Weighted Least Squares}
+wlmodi <- lm(acc_total ~TOTAL_VEHICLES, data=df, weights0=TOTAL_VEHICLES)
+
+
+```
 #confidence interval for coefficients
 ```{r confidence interval}
 confint(modl0, 'TOTAL_VEHICLES', level=0.95)
