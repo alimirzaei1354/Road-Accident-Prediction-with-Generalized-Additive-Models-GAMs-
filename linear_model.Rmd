@@ -64,6 +64,14 @@ model.matrix(modl0)
 par(mfrow=c(2,2)) # split the graphics device into 4 panels
 plot(modl0) # (uses plot.lm as modl0 is class ‘lm’)
 ```
+#perform Breusch-Pagan test - to check for Heteroscedasticity Null hypothesis - Homoscedasticity is present
+```{r Heteroscedasticity}
+#install.packages('lmtest')     # load lmtest package
+library(lmtest)
+model <- lm(acc_total ~ SPEED_VIOLATIONS , df)
+plot(fitted(model), resid(model), xlab='Fitted Values', ylab='Residuals')
+bptest(model)
+```
 #AIC 
 ```{R AIC }
 AIC(modl0)
