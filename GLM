@@ -1,0 +1,9 @@
+# GLM FAMILY  poisson, glm.nb  WITH offset arguman
+mod1 <- glm(acc_total ~ 1 +(TOTAL_VEHICLES|JMONTH), data=df,family=poisson)
+mod2 <- glm(acc_total ~ 1 + (TOTAL_VEHICLES|JMONTH)+offset(log(SPEED_VIOLATIONS)), data=df, family=poisson)
+mod3 <- glm.nb(acc_total ~ 1 +(TOTAL_VEHICLES|JMONTH)+offset(log(SPEED_VIOLATIONS)), data=df)
+
+prd1 <-predict(mod1)
+prd2 <-predict(mod2)
+prd3 <-predict(mod3)
+AIC(mod1,mod2,mod3)
