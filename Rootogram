@@ -1,0 +1,34 @@
+library('cowplot')
+library("countreg")
+library("ggplot2")
+
+root.p1 <- countreg::rootogram(glm(acc_total ~ 1 +(TOTAL_VEHICLES|JMONTH), data=df,family=poisson),style = "standing", plot = TRUE)
+root.p2 <- countreg::rootogram(glm(acc_total ~ 1 +(TOTAL_VEHICLES|JMONTH)+ offset(log(SPEED_VIOLATIONS)), data=df,family=poisson),style = "standing", plot = FALSE)
+root.p3 <- countreg::rootogram(glm.nb(acc_total ~ 1 +(TOTAL_VEHICLES|JMONTH)+offset(log(SPEED_VIOLATIONS)), data=df),style = "standing", plot = TRUE)
+root.p4 <- countreg::rootogram(glm(acc_total ~ 1 +(TOTAL_VEHICLES|JMONTH)+offset(log(SPEED_VIOLATIONS)), data=df,family = negative.binomial(theta = 1)),style = "standing", plot = TRUE)
+root.p5 <- countreg::rootogram(glm(acc_total ~ 1 +(TOTAL_VEHICLES|JMONTH)+offset(log(SPEED_VIOLATIONS)), data=df,family = negative.binomial(theta = 1000)),style = "standing", plot = TRUE)
+root.p6 <- countreg::rootogram(gam(acc_total  ~
+                                     s(SPEED_VIOLATIONS, k = 12, bs = 'tp') +
+                                     s(DISTANCE_VIOLATIONS, k = 12, bs = 'tp') +
+                                     s(JMONTH, bs = 'fs', k = 12) +
+                                     ti(class4, JMONTH, bs = 'fs') +
+                                     ti(police_enforcment, JMONTH, bs = 'fs') 
+                                     ,data = df, select = T, family = 'poisson'),style = "standing", plot = TRUE)
+root.p7 <- countreg::rootogram(gam(acc_total ~
+                                     s(SPEED_VIOLATIONS, k = 12, bs = 'tp') +
+                                     s(DISTANCE_VIOLATIONS, k = 12, bs = 'tp') +
+                                     ti(df$class2_speed, JMONTH, bs = 'fs')+
+                                     s(JMONTH, bs = 'fs', k = 12) +
+                                     ti(class4, JMONTH, bs = 'fs') +
+                                     ti(police_enforcment, JMONTH, bs = 'fs')+ offset(log(SPEED_VIOLATIONS)),
+                                   data =df, select = T, family ='nb'),style = "standing", plot = TRUE)
+
+par(mar=c(1,1,1,1))
+par(mfrow=c(7,1))
+plot(root.p1)
+plot(root.p2)
+plot(root.p3)
+plot(root.p4)
+plot(root.p5)
+plot(root.p6)
+plot(root.p7)
